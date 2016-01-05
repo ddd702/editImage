@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>图片处理</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0" />
+    <meta content="telephone=no" name="format-detection" />
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <link rel="stylesheet" href="css/bootstrap/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/dialog.css">
+</head>
+
+<body>
+    <div class="container">
+        <section id="j-form">
+            <div class="form-group">
+                <label>File input</label>
+                <input type="file" multiple id="j-fileInput">
+            </div>
+            <div class="content-box" id="j-contentBox">
+            </div>
+            <div class="edit-box" id="j-editBox">
+                <span class="glyphicon glyphicon-remove" id="j-editClose"></span>
+                <div class="canvas-box">
+                    <canvas id='j-canvas'>
+                    </canvas>
+                </div>
+                <footer class="edit-btns text-center">
+                    <div class="slider-wrap">
+                        <div class="form-inline">
+                            <label>缩放</label>
+                            <input type="number" name="slider1" class="form-control" />
+                        </div>
+                        <div class="dslider" id="slider1" data-cell="slider1">
+                            <div class="cross"></div>
+                            <div class="handler"></div>
+                        </div>
+                    </div>
+                    <span class="btn btn-success btn-block" id="j-getColor">取色</span>
+                    <span class="btn btn-success btn-block" id="j-getCut">截取</span>
+                    <span class="btn btn-success btn-block" id="j-downPic">下载当前图片</span>
+                    <div class="color-cell">
+                        <p>图片信息：</p>
+                        <p id="j-editImgSize"></p>
+                        <p id="j-editImgName"></p>
+                    </div>
+                    <div class="color-cell">
+                        <p>取色信息显示：</p>
+                        <span id="j-colorPicker" class="color-picker"></span>
+                        <span id="j-colorHex"></span>
+                    </div>
+                </footer>
+            </div>
+        </section>
+    </div>
+    <script id="t-imgText" type="text/template">
+        <span>文件名：<&=name&></span><span>尺寸：<&=nW&>x<&=nH&></span><span>文件大小:<&=size&>B</span><span>修改时间：
+        <&=D.utils.dateFormat(modifiedTime,'yyyy年MM月dd hh:mm:ss')&></span>
+    </script>
+    <script type="text/javascript" src="js/libs/requirejs/require.js"></script>
+    <script type="text/javascript" src="js/require.config.js"></script>
+    <script type="text/javascript">
+    require(['main'], function(main) {
+        var inputEle = document.querySelector('#j-fileInput');
+        var canvasEle = document.querySelector('#j-contentBox');
+        window.ddd = new main(canvasEle, inputEle);
+    });
+    </script>
+</body>
+
+</html>

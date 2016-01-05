@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>demo</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="initial-scale=1,width=device-width, maximum-scale=1, user-scalable=no, minimal-ui">
+    <link rel="stylesheet" type="text/css" href="dialog.css">
+    <style type="text/css" id="d-style">
+    * {
+        margin: 0;
+        padding: 0;
+    }
+    
+    html,
+    body {
+        height: 100%;
+        width: 100%;
+    }
+    
+    .button {
+        border: 0;
+        outline: 0;
+        background: #f70;
+        color: #fff;
+        padding: 5px 10px;
+        margin: 10px;
+        border-radius: 5px;
+        font-size: 25px;
+    }
+    
+    .button:active {
+        background: #777;
+    }
+    </style>
+</head>
+
+<body>
+    <button class="button" id="j-delClick">解绑事件</button>
+    <button class="button" id="j-alert">alert</button>
+    <button class="button" id="j-confirm">confirm</button>
+    <button class="button" id="j-prompt">prompt</button>
+    <div>
+        <img src="images/ico.jpg" width="60" height="60" id="imgDiv">
+        <input type="file" id="headImg" multiple name="headImg">
+    </div>
+    <script type="text/template" id="D-tmpl-alert">
+        <div class="d-dialog-cell">
+            <p class='d-dialog-title'>
+                <&=title&>
+            </p>
+            <p class="d-dialog-con">
+                <&=content&>
+            </p>
+            <div class="d-dialog-btn">
+                <a href="javascript:" class="btn" id="D-alert-y">
+                    <&=btn&>
+                </a>
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="D-tmpl-confirm">
+        <div class="d-dialog-cell">
+            <p class='d-dialog-title'>
+                <&=title&>
+            </p>
+            <p class="d-dialog-con">
+                <&=content&>
+            </p>
+            <div class="d-dialog-btns">
+                <a href="javascript:" class="btn" id="D-confirm-y">
+                    <&=btnY&>
+                </a>
+                <a href="javascript:" class="btn" id="D-confirm-n">
+                    <&=btnN&>
+                </a>
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="D-tmpl-prompt">
+        <div class="d-dialog-cell">
+            <p class='d-dialog-title'>
+                <&=title&>
+            </p>
+            <p class="d-dialog-con">
+                <&=content&>
+            </p>
+            <input class="d-dialog-input" type="<&=inputType&>" value="<&=defaultVal&>">
+            <div class="d-dialog-btns">
+                <a href="javascript:" class="btn" id="D-prompt-y">
+                    <&=btnY&>
+                </a>
+                <a href="javascript:" class="btn" id="D-prompt-n">
+                    <&=btnN&>
+                </a>
+            </div>
+        </div>
+    </script>
+    <script type="text/template" id="D-tmpl-notify">
+        <div class="d-notify-cell">
+            <span class='d-notify-con'>
+            <&=content&>
+        </span>
+        </div>
+    </script>
+    <script type="text/javascript" src="dialog.d.js"></script>
+    <script type="text/javascript">
+    var utils = D.utils;
+    var request = utils.getRequest();
+    var delBtn = document.querySelector('#j-delClick');
+    var headImg = document.querySelector('#headImg');
+    var alertBtn = document.querySelector('#j-alert');
+    var confirmBtn = document.querySelector('#j-confirm');
+    var promptBtn = document.querySelector('#j-prompt');
+    var imgDiv = document.querySelector('#imgDiv');
+    utils.setEvent(headImg,'change',function(){
+    	D.notify(this.value);
+    	if(!utils.viewUploadImage(this,imgDiv)){
+            this.value='';
+        };
+    });
+    utils.setEvent(alertBtn, 'click', function() {
+        D.alert('ddd')
+    });
+    utils.setEvent(confirmBtn, 'click', function() {
+        D.confirm({
+            content: '我帅不？',
+            fnY: function() {
+                D.notify('嗯嗯');
+            }
+        })
+    });
+    utils.setEvent(promptBtn, 'click', function() {
+        D.prompt({
+            content: '我的优点:',
+            fnY: function(t) {
+                D.notify('你填写了：' + t)
+            }
+        })
+    });
+    </script>
+</body>
+
+</html>
