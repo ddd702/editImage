@@ -1,6 +1,6 @@
 define(function(require) {
     var Config = require('config');
-    require('../tools/jquery.slidebar');
+    require('../tools/jquery.slideBar');
     var rgbToHex = function(r, g, b) {
         return ((r << 16) | (g << 8) | b).toString(16);
     }; //rgb装换为16进制
