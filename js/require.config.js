@@ -22,7 +22,7 @@ require.config({
             deps: ['jquery', 'iscroll'],
             exports: 'datepicker'　　　　　　
         },
-        '../tools/jquery.slidebar': {　　　　　　　　
+        '../tools/jquery.slideBar': {　　　　　　　　
             deps: ['jquery'],
             exports: 'slidebar'　　　　　　
         },
