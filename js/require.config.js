@@ -8,7 +8,7 @@ require.config({
     //the paths config could be for a directory.
     urlArgs: 'ver=0.1.2',
     paths: {
-        config: './_config',
+        config: './config',
         jquery: '../libs/jquery/2.1.4/jquery',
         D: '../tools/dialog.d/dialog.d',
         underscore: '../libs/underscore/1.8.3/underscore',
