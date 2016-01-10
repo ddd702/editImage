@@ -2,7 +2,7 @@
 A h5 page can edit images
 [demo](http://ddd702.github.io/editImage/)
 
-##2015.1.10
+##2016.1.10
 
 输出图片可选择输出的品质，文件名，和格式，点击确定即可下载。
 
