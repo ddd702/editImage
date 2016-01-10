@@ -4,7 +4,14 @@ define(function(require) {
     var rgbToHex = function(r, g, b) {
         return ((r << 16) | (g << 8) | b).toString(16);
     }; //rgb装换为16进制
-    var imagesBin = function(contentEle, inputEle, eidtEle) {
+    window.byteConvert = function(bytes) {
+        if (bytes <1000) return bytes+'B';
+        var k = 1000, // 1024
+            sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
+            i = Math.floor(Math.log(bytes) / Math.log(k));
+        return (bytes / Math.pow(k, i)).toPrecision(3) + ' ' + sizes[i];
+    };
+    var imagesBin = function(contentEle, inputEle) {
         console.log('run');
         var c = document.getElementById("j-canvas");
         this.init();
@@ -32,14 +39,21 @@ define(function(require) {
             c.setAttribute('width', w);
             c.setAttribute('height', h);
             _this.ctx.drawImage(img, 0, 0, w, h);
-            editImgSize.innerText=parseInt(w)+'x'+parseInt(h);
+            editImgSize.innerText = parseInt(w) + 'x' + parseInt(h);
         };
         var showEditBox = function(img) {
             _this.editEle.className = _this.editEle.className.replace('hidden', '') + ' show';
             document.body.className = "overflow-hidden";
             _this.nowImg = img;
-            editImgName.innerText=img.getAttribute('title');
-            if ($('input[name=slider1]').val() === '') {//初始化滑动插件
+            editImgName.innerText = img.getAttribute('title');
+            $("#slider2").slideBar({ //输出品质
+                max: 100,
+                min: 10,
+                crossC: "#3ef",
+                handlerC: '#f70',
+                defalutNum: 100
+            });
+            if ($('input[name=slider1]').val() === '') { //初始化滑动插件
                 $("#slider1").slideBar({
                     max: 500,
                     min: 10,
@@ -50,8 +64,8 @@ define(function(require) {
                         drawImg(_this.nowImg, _this.nowImg.naturalWidth * (v / 100), _this.nowImg.naturalHeight * (v / 100));
                     }
                 });
-            }else{
-                 $('input[name=slider1]').val('100').trigger('change');
+            } else {
+                $('input[name=slider1]').val('100').trigger('change');
             }
         };
         var hideEditBox = function() {
@@ -83,7 +97,7 @@ define(function(require) {
                     'name': _this.fileList[index].file.name,
                     'modifiedTime': _this.fileList[index].file.lastModified
                 };
-                imgEle.setAttribute('title',_this.fileList[index].file.name);
+                imgEle.setAttribute('title', _this.fileList[index].file.name);
                 closeBtn.addEventListener('click', function(e) {
                     e.preventDefault();
                     var parent = this.parentNode;
@@ -92,10 +106,7 @@ define(function(require) {
                     //e.target.parentNode.removeNode(true);
                 }, false);
                 editBtn.addEventListener('click', function(e) {
-                    console.log('点击');
-                    console.log(e);
                     e.preventDefault();
-                    D.notify(index);
                     showEditBox(imgEle);
                 }, false);
                 closeBtn.innerHTML = '删除';
@@ -131,34 +142,56 @@ define(function(require) {
                 _this.fileList[index].reader.readAsDataURL(files[i]);
             }
         };
+        /**
+         * 在本地进行文件保存
+         * @param  {String} data     要保存到本地的图片数据
+         * @param  {String} filename 文件名
+         */
+        var saveFile = function(data, filename) {
+            var save_link = document.createElementNS('http://www.w3.org/1999/xhtml', 'a');
+            save_link.href = data;
+            save_link.download = filename;
+            var event = document.createEvent('MouseEvents');
+            event.initMouseEvent('click', true, false, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);
+            save_link.dispatchEvent(event);
+        };
+
         //编辑界面的按钮
         var editCloseBtn = document.getElementById('j-editClose');
         var getColorBtn = document.getElementById('j-getColor');
         var getCutBtn = document.getElementById('j-getCut');
         var downPicBtn = document.getElementById('j-downPic');
-        var colorHex=document.getElementById('j-colorHex');
-        var colorPicker=document.getElementById('j-colorPicker');
-        var editImgName=document.getElementById('j-editImgName');
-        var editImgSize=document.getElementById('j-editImgSize');
-        downPicBtn.addEventListener('click',function(e){
-            D.confirm({
-                content:'请选择图片格式',
-                btnY:'jpg',
-                btnN:'png',
-                fnY:function(){
-                    var type='image/jpeg';
-                    var newImg=c.toDataURL(type,0.7);
-                    console.log(newImg);
-                    D.alert('<a href="'+newImg+'" download=ddd'+$.now()+'.jpg>点击此下载链接</a>',{btn:'关闭'});
-                },
-                fnN:function(){
-                    var type='image/png';
-                    var newImg=c.toDataURL(type,0.7);
-                    console.log(newImg);
-                    D.alert('<a href="'+newImg+'" download=ddd'+$.now()+'.png>点击此下载链接</a>',{btn:'关闭'});
-                }
-            });
-        },false);
+        var colorHex = document.getElementById('j-colorHex');
+        var colorPicker = document.getElementById('j-colorPicker');
+        var editImgName = document.getElementById('j-editImgName');
+        var editImgSize = document.getElementById('j-editImgSize');
+        //var downLinkEle=document.getElementById('j-link');
+        var outputEle = {
+            quality: document.querySelector('input[name=imgQuality]'),
+            name: document.querySelector('input[name=imgName]')
+                // type:document.querySelector('input[name=imgType]:checked')//动态元素不可缓存
+        }
+        downPicBtn.addEventListener('click', function(e) {
+            var imgData = {
+                quality: parseInt(outputEle.quality.value) / 100,
+                name: outputEle.name.value,
+                type: document.querySelector('input[name=imgType]:checked').value
+            }
+            var newImg = c.toDataURL(imgData.type, imgData.quality);
+            var imgName;
+            switch (imgData.type) {
+                case 'image/jpeg':
+                    imgName = imgData.name + '.jpg';
+                    break;
+                case 'image/png':
+                    imgName = imgData.name + '.png';
+                    break;
+                default:
+                    imgName = imgData.name + '.jpg';
+            }
+            saveFile(newImg, imgName);
+            //downLinkEle.innerHTML='<a href="' + newImg + '" download="' + imgName + '">-&gt;点击此下载链接</a>';
+        }, false);
         getColorBtn.addEventListener('click', function(e) {
             if (_this.editMode !== 'rgb') {
                 _this.editMode = 'rgb';
@@ -180,8 +213,8 @@ define(function(require) {
                 var g = imgData[1];
                 var b = imgData[2];
                 var a = imgData[3];
-                colorPicker.style.backgroundColor='rgba('+r+','+g+','+b+','+a+')';
-                colorHex.innerHTML='<p>#'+rgbToHex(r, g, b)+'</p><p>rgba('+r+','+g+','+b+','+a+')</p>';
+                colorPicker.style.backgroundColor = 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+                colorHex.innerHTML = '<p>#' + rgbToHex(r, g, b) + '</p><p>rgba(' + r + ',' + g + ',' + b + ',' + a + ')</p>';
                 console.log(rgbToHex(r, g, b));
             }
 
