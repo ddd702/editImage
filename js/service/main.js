@@ -49,7 +49,7 @@ define(function(require) {
             var imagedata = new ImageData(_this.originImgData.width, _this.originImgData.height);
             imagedata.data.set(_this.originImgData.data);
             var pix = imagedata.data;
-            if (v !== '0') {
+            if (v !== 0) {
                 v=1/v;
                 for (var i = 0, n = pix.length; i < n; i += 4) {
                     var grayscale = pix[i] * 0.3 * v + pix[i + 1] * 0.59 * v + pix[i + 2] * 0.11 * v;
@@ -197,7 +197,7 @@ define(function(require) {
             if(greyVal<0){
                 greyEle.value=0;
             }else{
-                imgGrey(greyEle.value);
+                imgGrey(parseFloat(greyEle.value));
             }
         });
         downPicBtn.addEventListener('click', function(e) {
