@@ -5,7 +5,7 @@ define(function(require) {
         return ((r << 16) | (g << 8) | b).toString(16);
     }; //rgb装换为16进制
     window.byteConvert = function(bytes) {
-        if (bytes <1000) return bytes+'B';
+        if (bytes < 1000) return bytes + 'B';
         var k = 1000, // 1024
             sizes = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'],
             i = Math.floor(Math.log(bytes) / Math.log(k));
@@ -15,6 +15,7 @@ define(function(require) {
         console.log('run');
         var c = document.getElementById("j-canvas");
         this.init();
+        this.canvas = c;
         this.inputEle = inputEle;
         this.delIndex = [];
         //this.readerList = [];
@@ -39,7 +40,25 @@ define(function(require) {
             c.setAttribute('width', w);
             c.setAttribute('height', h);
             _this.ctx.drawImage(img, 0, 0, w, h);
+            _this.originImgData = _this.ctx.getImageData(0, 0, w, h); //保存图片的元素像素点
             editImgSize.innerText = parseInt(w) + 'x' + parseInt(h);
+            greyEle.value=0;//把灰度值置为0
+        };
+        var imgGrey = function(v) {
+            var context = _this.ctx;
+            var imagedata = new ImageData(_this.originImgData.width, _this.originImgData.height);
+            imagedata.data.set(_this.originImgData.data);
+            var pix = imagedata.data;
+            if (v !== 0) {
+                v=1/v;
+                for (var i = 0, n = pix.length; i < n; i += 4) {
+                    var grayscale = pix[i] * 0.3 * v + pix[i + 1] * 0.59 * v + pix[i + 2] * 0.11 * v;
+                    pix[i] = grayscale; // red
+                    pix[i + 1] = grayscale; // green
+                    pix[i + 2] = grayscale; // blue
+                }
+            }
+            context.putImageData(imagedata, 0, 0);
         };
         var showEditBox = function(img) {
             _this.editEle.className = _this.editEle.className.replace('hidden', '') + ' show';
@@ -55,7 +74,7 @@ define(function(require) {
             });
             if ($('input[name=slider1]').val() === '') { //初始化滑动插件
                 $("#slider1").slideBar({
-                    max: 500,
+                    max: 300,
                     min: 10,
                     crossC: "#3ef",
                     handlerC: '#f70',
@@ -165,12 +184,22 @@ define(function(require) {
         var colorPicker = document.getElementById('j-colorPicker');
         var editImgName = document.getElementById('j-editImgName');
         var editImgSize = document.getElementById('j-editImgSize');
+        var greyEle=document.getElementById('j-grey');
         //var downLinkEle=document.getElementById('j-link');
         var outputEle = {
             quality: document.querySelector('input[name=imgQuality]'),
             name: document.querySelector('input[name=imgName]')
-                // type:document.querySelector('input[name=imgType]:checked')//动态元素不可缓存
+            // type:document.querySelector('input[name=imgType]:checked')//动态元素不可缓存
         }
+        greyEle.addEventListener('change',function(e){
+            console.log('grey');
+            var greyVal=greyEle.value;
+            if(greyVal<0){
+                greyEle.value=0;
+            }else{
+                imgGrey(parseInt(greyEle.value));
+            }
+        });
         downPicBtn.addEventListener('click', function(e) {
             var imgData = {
                 quality: parseInt(outputEle.quality.value) / 100,

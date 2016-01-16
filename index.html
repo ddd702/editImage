@@ -72,14 +72,19 @@
                 </div>
                 <footer class="edit-btns text-center">
                     <div class="slider-wrap">
-                        <div class="form-inline">
-                            <label>缩放</label>
-                            <input type="number" name="slider1" class="form-control" />
-                        </div>
-                        <div class="dslider" id="slider1" data-cell="slider1">
+                    <div class="dslider" id="slider1" data-cell="slider1">
                             <div class="cross"></div>
                             <div class="handler"></div>
                         </div>
+                        <div class="form-inline">
+                            <label>缩放(%)</label>
+                            <input type="number" name="slider1" class="form-control" />
+                        </div>
+                        
+                    </div>
+                    <div class="form-inline">
+                        <label>灰度</label>
+                        <input type="number" class="form-control" id="j-grey" />
                     </div>
                     <span class="btn btn-success btn-block" id="j-getColor">取色</span>
                     <span class="btn btn-success btn-block" id="j-getCut">截取</span>
