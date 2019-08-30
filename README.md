@@ -1,12 +1,29 @@
-# editImage
-A h5 page can edit images
-[demo](http://ddd702.github.io/editImage/)
+# editimage
 
-##2016.1.10
+## Project setup
+```
+npm install
+```
 
-输出图片可选择输出的品质，文件名，和格式，点击确定即可下载。
-##2016.1.16
+### Compiles and hot-reloads for development
+```
+npm run serve
+```
 
-添加灰度设置。
+### Compiles and minifies for production
+```
+npm run build
+```
 
-ps:完美兼容chrome,其他浏览器未测试兼容性，功能完善中
+### Run your tests
+```
+npm run test
+```
+
+### Lints and fixes files
+```
+npm run lint
+```
+
+### Customize configuration
+See [Configuration Reference](https://cli.vuejs.org/config/).
