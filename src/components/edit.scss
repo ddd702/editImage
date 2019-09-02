@@ -1,0 +1,44 @@
+.edit-dialog{
+    .el-dialog{
+      background: rgba($color: #000000, $alpha:0.7);
+    }
+    .el-dialog__body,.el-dialog__header{
+      padding: 0;
+    }
+    .el-dialog__body{
+      height: 100%;
+    }
+    .el-container{
+      height:100%;
+    }
+    .el-dialog__headerbtn .el-dialog__close{
+      color:#eee;
+      font-size: 30px;
+    }
+    .left-side{
+      width: 200px;
+      padding: 10px 20px;
+      background: #fefefe;
+    }
+    .edit-con{
+      text-align: center;
+    }
+    .get-rgb{
+      cursor: crosshair;
+    }
+    .rgb-span{
+      width: 30px;
+      height: 30px;
+      margin:10px 0;
+    }
+    .rgb-cell{
+      margin-left: 10px;
+      font-size: 12px;
+    }
+    .item-info{
+      p{
+        line-height: 1.5;
+        font-size: 13px;
+      }
+    }
+  }
