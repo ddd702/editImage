@@ -38,7 +38,7 @@
 
 <script>
 // @ is an alias to /src
-import EditDialog from '@/components/edit'
+import EditDialog from '@/components/edit.vue'
 export default {
   name: 'home',
   data(){
@@ -71,6 +71,7 @@ export default {
         imgEle.onload =()=>{
           var nW = imgEle.naturalWidth
           var nH = imgEle.naturalHeight
+          this.fileList[index].imageEl=imgEle
           this.fileList[index].imageInfo.w=nW
           this.fileList[index].imageInfo.h=nH
           this.fileList[index].imageSrc=evt.target.result
@@ -81,6 +82,7 @@ export default {
       console.warn('preview',file,fileList)
       this.fileList.push({
         file: file.raw,
+        imageEl:null,
         imageInfo:{
           w:'',
           h:'',
