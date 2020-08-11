@@ -1,6 +1,8 @@
 export default{
     data(){
         return {
+            strVisible:false,
+            strImgs:'',
             r:0,
             g:0,
             b:0,
@@ -43,6 +45,35 @@ export default{
                 this.b=b
                 this.a=(a/255).toFixed(1)
             }
+        },
+        strImg(){
+            const FONT_HEIGHT = 10
+            const FONT_WIDTH = 5
+            let drawStrs='$%^&*+.-0~ad1i'
+            var outStr = []
+            var imagedata = new ImageData(this.originImgData.width, this.originImgData.height)
+            imagedata.data.set(this.originImgData.data)
+            var pix = imagedata.data
+            let v=1//先置为灰度才耍
+            let width= imagedata.width
+            let height= imagedata.height
+            //开始间隔取色
+            for (let h = 0; h < height; h += FONT_HEIGHT) {
+                let lineStr = ''
+                for (let w = 0; w < width; w += FONT_WIDTH) {
+                    let i=(w + width * h) * 4
+                    var grayscale = pix[i] * 0.3 * v + pix[i + 1] * 0.59 * v + pix[i + 2] * 0.11 * v
+                    if(grayscale>200){
+                        lineStr+=' '
+                    }else{
+                        let gap=(255-grayscale)/255
+                        lineStr+=drawStrs.charAt(Math.round(gap*(drawStrs.length-1)))
+                    }
+                }
+                outStr.push(lineStr)
+            }
+            this.strImgs=outStr.join('\n')
+            this.strVisible=true
         },
         imgGrey() {
             let v=parseFloat(this.greyVal)
