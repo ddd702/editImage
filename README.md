@@ -1,5 +1,5 @@
 # editimage
-See [URL](http://ddd702.github.io/editImage/).
+See [URL](https://cdn.70read.com/img.html#/).
 ## Project setup
 ```
 npm install
