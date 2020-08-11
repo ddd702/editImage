@@ -29,12 +29,23 @@
               <p>rgba({{r}},{{g}},{{b}},{{a}})</p>
             </div>
           </div>
+          <el-button type="success" @click="strImg">导出图片字符</el-button>
           <el-button type="success" @click="openExport">导出图片</el-button>
         </el-aside>
         <el-main class="edit-con">
           <canvas :class="{'get-rgb':mode=='rgb'}" @click="clickCanvas" id="canvas"></canvas>
         </el-main>
       </el-container>
+    </el-dialog>
+    <el-dialog
+      class="str-dialog"
+      :fullscreen="true"
+      :before-close="handleStrClose"
+      :visible="strVisible"
+    >
+      <pre v-if="strImgs!==''" class="str-con">
+        {{strImgs}}
+      </pre>
     </el-dialog>
     <export-dialog ref="exportDialog"/>
   </div>
@@ -77,6 +88,9 @@ export default {
     greyTips(val){
       return '灰度'+val
     },
+    handleStrClose(){
+      this.strVisible=false;
+    },
     handleClose(){
       this.visible=false
     },
@@ -108,4 +122,11 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="scss">
 @import './edit.scss';
+.str-dialog{
+  text-align:center;
+}
+.str-con{
+  border:1px solid #333;
+  display:inline-block;
+}
 </style>
